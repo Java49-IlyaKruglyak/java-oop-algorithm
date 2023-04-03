@@ -2,58 +2,74 @@ package telran.util.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
+
+import telran.util.*;
+
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+
 
 class ArrayListTest {
-
+List<Integer> list;
+Integer[] numbers = {10, -20, 7, 50, 100, 30};
+@BeforeEach
+void setUp() {
+	list = new ArrayList<>(1);
+	for( int i = 0; i < numbers.length; i++) {
+		list.add(numbers[i]);
+	}
+}
 	@Test
 	void testAdd() {
-		ArrayList <Integer> numbers = new ArrayList<>();
-		ArrayList <String> strings = new ArrayList<>();
-		numbers.add(5);
-		numbers.add(10);
-		strings.add("ABC");
-		assertEquals(2, numbers.size());
-		assertEquals(1, strings.size());
-		
+	assertTrue(list.add(numbers[0]));
+	assertEquals(numbers.length + 1, list.size());
 	}
 	@Test
 	void testAddIndex() {
-		ArrayList <Integer> myList = new ArrayList<>();
-		myList.add(10);
-		myList.add(20);
-		myList.add(30);
-		myList.add(40);
-		myList.add(50);
-		myList.add(0, 5);
-		myList.add(2, 25);
-		myList.add(7, 55);
-		assertEquals(5, myList.get(0));
-		assertEquals(25, myList.get(2));
-		assertEquals(55, myList.get(7));
-		assertEquals(8, myList.size());
-		
+		Integer [] expected0_500 = {500, 10, -20, 7, 50, 100, 30};
+		Integer [] expected0_500_3_700 = {500, 10, -20, 700, 7, 50, 100, 30};
+		Integer [] expected0_500_3_700_8_300 = {500, 10, -20, 700, 7, 50, 100, 30, 300};
+		list.add(0, 500);
+		runTest(expected0_500);
+		list.add(3, 700);
+		runTest(expected0_500_3_700);
+		list.add(8, 300);
+		runTest(expected0_500_3_700_8_300);
 		
 	}
 	@Test
 	void testRemoveIndex() {
-		ArrayList <Integer> myList2 = new ArrayList<>();
-		myList2.add(10);
-		myList2.add(20);
-		myList2.add(30);
-		myList2.add(40);
-		myList2.add(50);
-		myList2.add(60);
-		myList2.add(70);
-		myList2.add(80);
-		assertEquals(10, myList2.remove(0));
-		assertEquals(40, myList2.remove(2));
-		assertEquals(80, myList2.remove(5));
-		assertEquals(5, myList2.size());
-	
-
-
+		Integer [] expectedNo10 = { -20, 7, 50, 100, 30};
+		Integer [] expectedNo10_50 = { -20, 7,  100, 30};
+		Integer [] expectedNo10_50_30 = { -20, 7,  100};
+		assertEquals(10, list.remove(0));
+		runTest(expectedNo10);
+		assertEquals(50, list.remove(2));
+		runTest(expectedNo10_50);
+		assertEquals(30, list.remove(3));
+		runTest(expectedNo10_50_30);
+		
 	}
+	@Test
+	void testGetIndex() {
+		assertEquals(10, list.get(0));
+	}
+	@Test
+	void testIndexOf() {
+		list.add(3, 10);
+		assertEquals(0, list.indexOf(10));
+		assertEquals(-1, list.indexOf(null));
+	}
+	private void runTest(Integer[] expected) {
+		int size = list.size() ;
+		Integer [] actual = new Integer[expected.length];
+		
+		for(int i = 0; i < size; i++) {
+			actual[i] = list.get(i);
+		}
+		assertArrayEquals(expected, actual);
+		
+	}
+
 }
