@@ -77,7 +77,7 @@ public class ArrayList<T> implements List<T> {
 	public T[] toArray(T[] srcArray) {
 		T[] destArray = srcArray;
 		if (destArray.length < size) {
-			destArray = (T[]) Arrays.copyOf(this.array, this.size, srcArray.getClass());
+			destArray = (T[]) Arrays.copyOf(array, size, srcArray.getClass());
 		} else {
 			System.arraycopy(array, 0, destArray, 0, size);
 			if (destArray.length > size) {
@@ -109,7 +109,7 @@ public class ArrayList<T> implements List<T> {
 	@Override
 	public int lastIndexOf(T pattern) {
 		int res = -1;
-		for (int i = size - 1; i > 0; i--) {
+		for (int i = size - 1; i >= 0; i--) {
 			if (isEqual(array[i], pattern)) {
 				res = i;
 				break;

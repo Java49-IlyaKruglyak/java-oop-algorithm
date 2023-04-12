@@ -66,6 +66,7 @@ void setUp() {
 		list.add(3, 30);
 		assertEquals(6, list.lastIndexOf(30));
 		assertEquals(-1, list.lastIndexOf(null));
+		assertEquals(0, list.lastIndexOf(10));
 	}
 	
 	@Test
