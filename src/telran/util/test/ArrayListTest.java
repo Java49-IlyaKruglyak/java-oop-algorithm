@@ -61,6 +61,39 @@ void setUp() {
 		assertEquals(0, list.indexOf(10));
 		assertEquals(-1, list.indexOf(null));
 	}
+	@Test
+	void lastIndexOf() {
+		list.add(3, 30);
+		assertEquals(6, list.lastIndexOf(30));
+		assertEquals(-1, list.lastIndexOf(null));
+	}
+	
+	@Test
+	void testRemovePattern() {
+		int size = list.size();
+		Integer expected_10 = 10;
+		Integer expected_99 = 99;
+		assertTrue(list.remove(expected_10));
+		assertFalse(list.remove(expected_99));
+		assertEquals(size-1, list.size());
+		
+		
+	}
+	@Test
+	void testToArray() {
+		Integer[] expected = numbers;
+		Integer[] expected_with_null = {10, -20, 7, 50, 100, 30, null};
+		
+		Integer[] regularSize = new Integer[list.size()];
+		Integer[] increasedSize = new Integer[list.size()+1];
+		Integer[] decreasedSize = new Integer[list.size()-1];
+		
+		assertArrayEquals(expected, list.toArray(regularSize));
+		assertArrayEquals(expected, list.toArray(decreasedSize));
+		assertArrayEquals(expected_with_null, list.toArray(increasedSize));
+		
+		
+	}
 	private void runTest(Integer[] expected) {
 		int size = list.size() ;
 		Integer [] actual = new Integer[expected.length];
