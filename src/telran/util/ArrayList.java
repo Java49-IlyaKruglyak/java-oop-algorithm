@@ -121,13 +121,27 @@ public class ArrayList<T> implements List<T> {
 	@Override
 	public void sort() {
 		Arrays.sort(array, 0, size);
-		
+
 	}
 
 	@Override
 	public void sort(Comparator<T> comp) {
-		Arrays.sort(array,  0, size, comp);
-		
+
+		boolean notSorted = true;
+		while (notSorted) {
+			notSorted = false;
+			for (int i = 0; i < size -1; i++) {
+
+				if (comp.compare(array[i], array[i + 1]) < 0) {
+					notSorted = true;
+					T temp = array[i + 1];
+					array[i + 1] = array[i];
+					array[i] = temp;
+
+				}
+			}
+		}
+
 	}
 
 }

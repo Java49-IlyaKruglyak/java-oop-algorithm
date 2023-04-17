@@ -1,14 +1,11 @@
 package telran.util.test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.lang.reflect.Array;
-
 import org.junit.jupiter.api.BeforeEach;
 
 import telran.util.*;
 
 import org.junit.jupiter.api.Test;
-
 
 
 class ArrayListTest {
@@ -132,7 +129,7 @@ void setUp() {
 		persons.add(p1);
 		persons.add(p2);
 		persons.add(p3);
-		Person expected[] = {p3, p1, p2};
+		Person expected[] = {p2, p1, p3};
 		persons.sort(new PersonsAgeComparator());
 		assertArrayEquals(expected,
 				persons.toArray(new Person[0]));
@@ -146,6 +143,14 @@ void setUp() {
 			actual[i] = list.get(i);
 		}
 		assertArrayEquals(expected, actual);
+		
+	}
+	@Test
+	void testEvenOddComparator() {
+		Integer expected[] = {-20, 10, 30, 50, 100, 17, 7};
+		list.add(17);
+		list.sort(new EvenOddComparator());
+		assertArrayEquals(expected, list.toArray(new Integer[0]));
 		
 	}
 

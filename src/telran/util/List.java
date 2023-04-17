@@ -10,5 +10,4 @@ int indexOf(T pattern);
 int lastIndexOf(T pattern);
 void sort();
 void sort(Comparator<T> comp);
-
 }
