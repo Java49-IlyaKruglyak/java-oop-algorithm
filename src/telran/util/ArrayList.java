@@ -1,6 +1,7 @@
 package telran.util;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class ArrayList<T> implements List<T> {
 	private static final int DEFAULT_CAPACITY = 16;
@@ -64,28 +65,26 @@ public class ArrayList<T> implements List<T> {
 
 	@Override
 	public boolean remove(T pattern) {
+		boolean res = false;
 		int index = indexOf(pattern);
-		if (index != -1) {
+		if (index > -1) {
+			res = true;
 			remove(index);
-			return true;
 		}
-		return false;
+		return res;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public T[] toArray(T[] srcArray) {
-		T[] destArray = srcArray;
-		if (destArray.length < size) {
-			destArray = (T[]) Arrays.copyOf(array, size, srcArray.getClass());
-		} else {
-			System.arraycopy(array, 0, destArray, 0, size);
-			if (destArray.length > size) {
-				destArray[size] = null;
-			}
-
+	public T[] toArray(T[] ar) {
+		if (ar.length < size) {
+			ar = Arrays.copyOf(ar, size);
 		}
-		return destArray;
+		System.arraycopy(array, 0, ar, 0, size);
+		if (ar.length > size) {
+			ar[size] = null;
+		}
+
+		return ar;
 	}
 
 	@Override
@@ -109,13 +108,26 @@ public class ArrayList<T> implements List<T> {
 	@Override
 	public int lastIndexOf(T pattern) {
 		int res = -1;
-		for (int i = size - 1; i >= 0; i--) {
-			if (isEqual(array[i], pattern)) {
-				res = i;
-				break;
+		int index = size - 1;
+		while (index >= 0 && res == -1) {
+			if (isEqual(array[index], pattern)) {
+				res = index;
 			}
+			index--;
 		}
 		return res;
+	}
+
+	@Override
+	public void sort() {
+		Arrays.sort(array, 0, size);
+		
+	}
+
+	@Override
+	public void sort(Comparator<T> comp) {
+		Arrays.sort(array,  0, size, comp);
+		
 	}
 
 }
