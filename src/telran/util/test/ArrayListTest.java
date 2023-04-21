@@ -1,11 +1,13 @@
 package telran.util.test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;import java.lang.reflect.Array;
+
 import org.junit.jupiter.api.BeforeEach;
 
 import telran.util.*;
 
 import org.junit.jupiter.api.Test;
+
 
 
 class ArrayListTest {
@@ -72,13 +74,13 @@ void setUp() {
 	void testIndexOf() {
 		list.add(3, 1280);
 		assertEquals(3, list.indexOf(1280));
-		assertEquals(-1, list.indexOf(null));
+		assertEquals(-1, list.indexOf((Integer)null));
 	}
 	@Test
 	void testLastIndexOf() {
 		list.add(3, 10);
 		assertEquals(3, list.lastIndexOf(10));
-		assertEquals(-1, list.lastIndexOf(null));
+		assertEquals(-1, list.lastIndexOf((Integer)null));
 	}
 	@Test
 	void testToArrayForBigArray() {
@@ -129,11 +131,38 @@ void setUp() {
 		persons.add(p1);
 		persons.add(p2);
 		persons.add(p3);
-		Person expected[] = {p2, p1, p3};
-		persons.sort(new PersonsAgeComparator());
+		Person expected[] = {p3, p1, p2};
+		persons.sort((prs1, prs2) -> Integer.compare(prs2.getAge(), prs1.getAge()));
+	
 		assertArrayEquals(expected,
 				persons.toArray(new Person[0]));
 		
+	}
+	@Test
+	void testEvenOddSorting() {
+		Integer[] expected = { -20,  10, 30, 50, 100, 7, -17};
+		list.add(-17);
+		//list.sort((a, b) -> evenOddCompare(a, b));
+//		list.sort((a, b) -> {
+//			int res = Math.abs(a % 2) - Math.abs(b % 2);
+//			if (res == 0) {
+//				res = a % 2 == 0 ? a - b : b - a;
+//			}
+//			return res;
+//		});
+		list.sort(ArrayListTest::evenOddCompare);
+		assertArrayEquals(expected, list.toArray(new Integer[0]));
+	}
+	@Test
+	void testIndexOfPredicate()  {
+		assertEquals(1, list.indexOf(a -> a < 0));
+		list.add(-17);
+		assertEquals(-1, list.indexOf(a -> a % 2 != 0 && a > 7));
+	}
+	@Test
+	void testRemoveIfAll() {
+		assertTrue(list.removeIf(a -> true));
+		assertEquals(0, list.size());
 	}
 	private void runTest(Integer[] expected) {
 		int size = list.size() ;
@@ -145,13 +174,12 @@ void setUp() {
 		assertArrayEquals(expected, actual);
 		
 	}
-	@Test
-	void testEvenOddComparator() {
-		Integer expected[] = {-20, 10, 30, 50, 100, 17, 7};
-		list.add(17);
-		list.sort(new EvenOddComparator());
-		assertArrayEquals(expected, list.toArray(new Integer[0]));
-		
+	static private int evenOddCompare(Integer a, Integer b) {
+		int res = Math.abs(a % 2) - Math.abs(b % 2);
+		if (res == 0) {
+			res = a % 2 == 0 ? a - b : b - a;
+		}
+		return res;
 	}
 
 }

@@ -24,5 +24,4 @@ public class Person implements Comparable<Person>{
 		
 		return Long.compare(this.id, person.id);
 	}
-	
 }
