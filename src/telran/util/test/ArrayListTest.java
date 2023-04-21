@@ -160,10 +160,28 @@ void setUp() {
 		assertEquals(-1, list.indexOf(a -> a % 2 != 0 && a > 7));
 	}
 	@Test
+	void testLastIndexOfPredicate()  {
+		list.add(-17);
+		assertEquals(6, list.lastIndexOf(a -> a < 0));
+		
+		assertEquals(1, list.lastIndexOf(a -> a % 2 == 0 && a < 30));
+	}
+	@Test
 	void testRemoveIfAll() {
 		assertTrue(list.removeIf(a -> true));
 		assertEquals(0, list.size());
 	}
+	@Test
+	void testRemoveIf() {
+		assertTrue(list.removeIf(a -> a / 2 == 50));
+		assertEquals(5, list.size());
+		assertFalse(list.removeIf(a -> a == 0));
+		assertTrue(list.removeIf(a -> a > 0));
+		assertFalse(list.removeIf(a -> a > 100));
+	}
+	
+	//Integer expected[] = {-20, 7, 10, 30,  50, 100 };
+	
 	private void runTest(Integer[] expected) {
 		int size = list.size() ;
 		Integer [] actual = new Integer[expected.length];
