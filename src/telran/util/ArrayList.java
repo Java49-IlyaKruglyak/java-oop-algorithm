@@ -119,12 +119,12 @@ public class ArrayList<T> implements List<T> {
 		return res;
 	}
 
-	// @SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	@SuppressWarnings("unchecked")
 	@Override
 	public void sort() {
-		sort((Comparator<T>) Comparator.naturalOrder());
-
+		sort((Comparator<T>)Comparator.naturalOrder());
+		
 	}
 
 	@Override
@@ -134,21 +134,21 @@ public class ArrayList<T> implements List<T> {
 		do {
 			flUnSort = false;
 			n--;
-			for (int i = 0; i < n; i++) {
+			for(int i = 0; i < n; i++) {
 				if (comp.compare(array[i], array[i + 1]) > 0) {
 					swap(i);
 					flUnSort = true;
 				}
 			}
-		} while (flUnSort);
-
+		}while(flUnSort);
+		
 	}
 
 	private void swap(int i) {
 		T tmp = array[i];
 		array[i] = array[i + 1];
 		array[i + 1] = tmp;
-
+		
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public class ArrayList<T> implements List<T> {
 	public int lastIndexOf(Predicate<T> predicate) {
 		int res = -1;
 		int index = size - 1;
-		while (index > -1 && res == -1) {
+		while (index >= 0 && res == -1) {
 			if (predicate.test(array[index])) {
 				res = index;
 			}
@@ -177,30 +177,23 @@ public class ArrayList<T> implements List<T> {
 		return res;
 	}
 
-//	@Override												Vladimirs realization
-//	public boolean removeIf(Predicate<T> predicate) {
-//		int newSize = size;
-//		int index = 0; 
-//		for(int i = 0; i < newSize; i++) {
-//			if(!predicate.test(array[i])) {
-//				array[index++] = array[i];
-//			}
-//			size = index;
-//		}
-//		return newSize != size;
-//	}
-
-	@Override // My realization
+	@Override
 	public boolean removeIf(Predicate<T> predicate) {
-		boolean flag = false;
-		for (int i = 0; i < size; i++) {
-			if (predicate.test(array[i])) {
+		int oldSize = size;
+//		int i = 0;
+//		while(i < size) {
+//			if(predicate.test(array[i])) {
+//				remove(i);
+//			} else {
+//				i++;
+//			}
+//		}
+		for(int i = size - 1; i >= 0; i--) {
+			if(predicate.test(array[i])) {
 				remove(i);
-				i--;
-				flag = true;
-			}
-
+			} 
 		}
-		return flag;
+		return oldSize > size;
 	}
+
 }
