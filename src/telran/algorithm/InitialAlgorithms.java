@@ -1,5 +1,7 @@
 package telran.algorithm;
 
+import java.util.Comparator;
+
 public class InitialAlgorithms {
 	public static void sortShortPositive(short[] array) {
 		int[] helper = new int[Short.MAX_VALUE];
@@ -9,53 +11,68 @@ public class InitialAlgorithms {
 		for (int i = 0; i < array.length; i++) {
 			helper[array[i]]++;
 		}
-		int index = 0;
+		int ind = 0;
 		for (int i = 0; i < helper.length; i++) {
 			for (int j = 0; j < helper[i]; j++) {
-				array[index++] = (short) i;
+				array[ind++] = (short) i;
 			}
 		}
 
 	}
 
 	public static boolean isSum2(short[] array, short sum) {
+		// array of the positive short numbers
+		// returns true if there are two numbers in the given array,
+		// sum of which equals the given sum value
+		// otherwise false
+	
+		int helperSize = sum < 0 ? Short.MAX_VALUE + 1 : sum + 1;
+		boolean[] helper = new boolean[helperSize];
 		boolean res = false;
-
-		for (int i = 0; i < array.length - 1; i++) {
-			if (array[i] <= sum) {
-				for (int j = i + 1; j < array.length; j++) {
-					if (sum == (short) (array[i] + array[j])) {
-						res = true;
-						break;
-					}
+		int index = 0;
+		while (index < array.length && !res) {
+			short value = array[index];
+			short secondValue =  (short) (sum - value);
+			if (secondValue >= 0) {
+				if (helper[secondValue]) {
+					res = true;
+				} else {
+					helper[value] = true;
 				}
 			}
-			if (res) {
-				break;
-			}
+			index++;
 		}
 		return res;
 	}
 
 	public static short getMaxPositiveWithNegativeReflect(short[] array) {
-		short max = -1;
-		short isReflective = -1;
+		// returns maximal positive number, for which there is the negative image
+		// If there are not such numbers at all the method returns -1
+		short res = -1;
+		byte[] helper = new byte[Short.MAX_VALUE];
+		short candidate = -1;
 		for (int i = 0; i < array.length; i++) {
-			if (array[i] >= 0 && array[i] > max) {
-				max = array[i];
-				for (int j = 0; j < array.length; j++) {
-					if (array[j] < 0 && max + array[j] == 0) {
-						isReflective = max;
-						break;
-					}
-				}
+			candidate = (short) Math.abs(array[i]);
+			if (array[i] < 0) {
+
+				res = getRes(res, helper, candidate, 1);
+			} else {
+				res = getRes(res, helper, candidate, -1);
 			}
 		}
-		return isReflective;
+
+		return res;
 	}
 
+	private static short getRes(short res, byte[] helper, short candidate, int sign) {
+		if (helper[candidate] == 1 * sign && candidate > res) {
+			res = candidate;
+		} else if (helper[candidate] == 0) {
+			helper[candidate] =  (byte) (-1 * sign);
+		}
+		return res;
+	}
 
-	
 	public static void bubbleSort(short[] array) {
 		// sorting with bubble sort algorithm
 		int size = array.length;
@@ -73,5 +90,24 @@ public class InitialAlgorithms {
 			}
 		} while (flUnsorted);
 
+	}
+	public static <T> int binarySearch(T [] array, T key,
+			Comparator<T> comp) {
+		int leftIndex = 0;
+		int rightIndex = array.length - 1;
+		int middleIndex = rightIndex / 2;
+		int compRes = 0;
+		while(leftIndex <= rightIndex &&
+				(compRes = comp.compare(key, array[middleIndex] )) != 0) {
+			if (compRes > 0) {
+				//move to right part of the array
+				leftIndex = middleIndex + 1;
+			} else {
+				rightIndex = middleIndex - 1;
+			}
+			middleIndex = (leftIndex + rightIndex) / 2;
+			
+		}
+		return leftIndex > rightIndex ? -1 : middleIndex;
 	}
 }
