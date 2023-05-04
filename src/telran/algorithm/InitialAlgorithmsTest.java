@@ -72,6 +72,18 @@ class InitialAlgorithmsTest {
 	void maxValueComplexityLogNTest() {
 		assertEquals(Long.MAX_VALUE, getMaxValueComplexityLogN());
 	}
+	@Test
+	void binarySearchTest() {
+		Integer ar[] = { 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 20, 40 };
+		assertEquals(-14, binarySearch(ar, 3, Integer::compare));
+		assertEquals(3, binarySearch(ar, 2, Integer::compare ));
+		assertEquals(-1, binarySearch(ar, 0, Integer::compare));
+		assertEquals(13, binarySearch(ar, 4, Integer::compare));
+		assertEquals(0, binarySearch(ar, 1, Integer::compare));
+		assertEquals(-16, binarySearch(ar, 25, Integer::compare));
+		assertEquals(-17, binarySearch(ar, 45, Integer::compare));
+	}
+	
 	private Long getMaxValueComplexityN() {
 		long res = 1;
 		while(res > 0) {
