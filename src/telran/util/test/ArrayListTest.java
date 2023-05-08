@@ -39,7 +39,7 @@ void setUp() {
 		runTest(expected0_500_3_700_8_300);
 		
 		assertThrowsExactly(IndexOutOfBoundsException.class,
-				() -> list.add(list.size(), 200));
+				() -> list.add(list.size()+1, 200));
 		assertThrowsExactly(IndexOutOfBoundsException.class,
 				() -> list.add(-1, 200));
 
