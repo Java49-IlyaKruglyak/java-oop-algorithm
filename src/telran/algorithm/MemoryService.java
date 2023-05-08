@@ -17,7 +17,7 @@ public static int getMaxAvailableSize() {
 		array = null;
 	}
 	
-	return middle;
+	return right;
 	
 }
 }
