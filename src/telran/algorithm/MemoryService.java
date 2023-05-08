@@ -4,20 +4,19 @@ public class MemoryService {
 public static int getMaxAvailableSize() {
 	int right = Integer.MAX_VALUE;
 	int left = 0;
-	int middle = 0;
-	byte[] array = null;
+	int middle = right / 2;
+	int maxSize = 0;
 	while (left <= right) {
-		middle = (left/2) + (right/2);
 		try {
-			array = new byte[middle];
+			byte[] array = new byte[middle];
+			maxSize = middle;
 			left = middle + 1;
 		} catch(OutOfMemoryError e) {
 			right = middle - 1;
 		}
-		array = null;
+		middle = right / 2 + left / 2;
 	}
-	
-	return right;
+	return maxSize;
 	
 }
 }
