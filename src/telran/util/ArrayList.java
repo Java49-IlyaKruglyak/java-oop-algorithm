@@ -42,7 +42,6 @@ public class ArrayList<T> implements List<T> {
 			reallocate();
 		}
 		System.arraycopy(array, index, array, index + 1, size - index);
-		
 		array[index] = obj;
 		size++;
 	}
@@ -53,6 +52,7 @@ public class ArrayList<T> implements List<T> {
 			throw new IndexOutOfBoundsException(index);
 		}
 		T res = array[index];
+
 		System.arraycopy(array, index + 1, array, index, size - index - 1);
 		size--;
 		return res;
