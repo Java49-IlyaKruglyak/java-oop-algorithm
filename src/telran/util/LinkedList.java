@@ -36,16 +36,17 @@ public class LinkedList<T> implements List<T> {
 	public boolean remove(T pattern) {
 		Node<T> node = head;
 		boolean resFlag = false;
-	for (int i = 0; i < size; i++) {
-		T obj = get(i);
-		if (isEqual(obj, pattern)) {
-			remove(i);
-			node = node.next;
-			resFlag = true;
+		for (int i = 0; i < size; i++) {
+			T obj = get(i);
+			if (isEqual(obj, pattern)) {
+				remove(i);
+				node = node.next;
+				resFlag = true;
+				break;
+			}
 		}
+		return resFlag;
 	}
-	return resFlag;
-}
 
 	@Override
 	public T[] toArray(T[] ar) {
@@ -100,6 +101,7 @@ public class LinkedList<T> implements List<T> {
 			T obj = get(i);
 			if (isEqual(obj, pattern)) {
 				index = i;
+				break;
 			}
 		}
 		return index;
@@ -138,6 +140,7 @@ public class LinkedList<T> implements List<T> {
 		while (index < size && res == -1) {
 			if (node != null && predicate.test(node.obj)) {
 				res = index;
+				break;
 			}
 			node = node.next;
 			index++;
@@ -153,6 +156,7 @@ public class LinkedList<T> implements List<T> {
 		while (index > 0 && res == -1) {
 			if (node != null && predicate.test(node.obj)) {
 				res = index;
+				break;
 			}
 			node = node.next;
 			index--;
@@ -162,17 +166,19 @@ public class LinkedList<T> implements List<T> {
 
 	@Override
 	public boolean removeIf(Predicate<T> predicate) {
-		boolean resFlag = false;
+		int oldSize = size;
 		Node<T> node = head;
-		for (int i = 0; i < size; i++) {
-			if (node != null && predicate.test(node.obj)) {
-				removeNode(getNode(i));
-				resFlag = true;
-				
+		while (node != null && predicate != null) {
+			if (predicate.test(node.obj)) {
+				Node<T> temp = node.next;
+				removeNode(node);
+				node = temp;
+			} else {
+
+				node = node.next;
 			}
-			node = node.next;
 		}
-		return resFlag;
+		return oldSize > size;
 	}
 
 	private void addNode(int index, Node<T> node) {
@@ -247,12 +253,16 @@ public class LinkedList<T> implements List<T> {
 
 	private void removeNodeHead(Node<T> node) {
 		head = head.next;
+		if(head != null) {
 		head.prev = null;
+		}
 	}
 
 	private void removeNodeTail(Node<T> node) {
 		tail = tail.prev;
+		if(tail != null) {
 		tail.next = null;
+		}
 	}
 
 	private void removeNodeMiddle(Node<T> node) {
