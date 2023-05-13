@@ -128,7 +128,7 @@ public class ArrayList<T> implements List<T> {
 		return res;
 	}
 
-	//@SuppressWarnings("unchecked")
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void sort() {
