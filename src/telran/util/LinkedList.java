@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.function.Predicate;
 
 public class LinkedList<T> implements List<T> {
+
 	Node<T> head;
 	Node<T> tail;
 	int size;
@@ -100,14 +101,26 @@ public class LinkedList<T> implements List<T> {
 		return lastIndexOf(obj -> isEqual(obj, pattern));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void sort() {
-		//TODO
+		sort((Comparator<T>)Comparator.naturalOrder());
 
 	}
 
+
 	@Override
 	public void sort(Comparator<T> comp) {
+		T[] array = (T[]) new Object[size];
+		array = toArray(array);
+		
+		Arrays.sort(array, comp);
+		Node<T> node = head;
+
+		for(int i = 0; i < array.length; i++) {
+			node.obj = array[i];
+			node = node.next;
+		}
 		//TODO
 		//1. call the method toArray
 		//2. By applying Arrays.sort you sort the array from #1
