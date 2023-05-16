@@ -104,27 +104,26 @@ public class LinkedList<T> implements List<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void sort() {
-		sort((Comparator<T>)Comparator.naturalOrder());
+		sort((Comparator<T>) Comparator.naturalOrder());
 
 	}
-
 
 	@Override
 	public void sort(Comparator<T> comp) {
 		T[] array = (T[]) new Object[size];
 		array = toArray(array);
-		
+
 		Arrays.sort(array, comp);
 		Node<T> node = head;
 
-		for(int i = 0; i < array.length; i++) {
+		for (int i = 0; i < array.length; i++) {
 			node.obj = array[i];
 			node = node.next;
 		}
-		//TODO
-		//1. call the method toArray
-		//2. By applying Arrays.sort you sort the array from #1
-		//3. Passing over all LinkedList nodes and setting references to objects (T)
+		// TODO
+		// 1. call the method toArray
+		// 2. By applying Arrays.sort you sort the array from #1
+		// 3. Passing over all LinkedList nodes and setting references to objects (T)
 		// in the appropriate order from #2
 
 	}
@@ -265,7 +264,7 @@ public class LinkedList<T> implements List<T> {
 
 	private boolean isEqual(T object, T pattern) {
 
-		return pattern == null  ? object == pattern : pattern.equals(object);
+		return pattern == null ? object == pattern : pattern.equals(object);
 	}
 
 }
