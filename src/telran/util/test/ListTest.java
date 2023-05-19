@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 
 abstract class ListTest extends CollectionTest{
-List<Integer> list = getList();
 
+List<Integer> list = getList();
 @Override
 protected Collection<Integer> getCollection() {
 	return list;
@@ -133,6 +133,7 @@ protected Collection<Integer> getCollection() {
 		list.add(-17);
 		assertEquals(-1, list.indexOf(a -> a % 2 != 0 && a > 7));
 	}
+	
 	
 	
 	static private int evenOddCompare(Integer a, Integer b) {
