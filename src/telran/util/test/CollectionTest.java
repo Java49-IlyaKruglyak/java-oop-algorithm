@@ -4,7 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,6 +83,19 @@ public abstract class CollectionTest {
 		Integer actualArray[] =
 				collection.toArray(new Integer[0]);
 		assertArrayEquals(numbers, actualArray);
+	}
+	@Test
+	void testIterator() {
+		
+		Iterator<Integer> it1 = collection.iterator();
+		Iterator<Integer> it2 = collection.iterator();
+		it1.next();
+		while(it2.hasNext()) {
+			it2.next();
+		}
+		assertEquals(-20,it1.next());
+		
+		assertThrowsExactly(NoSuchElementException.class, () -> it2.next());
 	}
 	protected void runTest(Integer[] expected) {
 		Integer [] actual = collection.toArray(new Integer[0]);

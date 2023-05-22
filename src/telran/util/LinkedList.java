@@ -3,6 +3,7 @@ package telran.util;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class LinkedList<T> implements List<T> {
@@ -10,17 +11,21 @@ public class LinkedList<T> implements List<T> {
 	Node<T> tail;
 	int size;
 private class LinkedListIterator implements Iterator<T> {
-
+Node<T> current = head;
 	@Override
 	public boolean hasNext() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return current != null;
 	}
 
 	@Override
 	public T next() {
-		// TODO Auto-generated method stub
-		return null;
+		if (!hasNext()) {
+			throw new NoSuchElementException();
+		}
+		T res = current.obj;
+		current = current.next;
+		return res;
 	}
 	
 }
