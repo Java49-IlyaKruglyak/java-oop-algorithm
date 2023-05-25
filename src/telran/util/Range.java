@@ -1,6 +1,5 @@
 package telran.util;
 
-import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
@@ -8,43 +7,55 @@ import java.util.function.Predicate;
 public class Range implements Iterable<Integer> {
 	private int min;
 	private int max;
-	Collection <Integer> removed;
+	private List<Integer> removedList = new LinkedList<>();
 	public Range(int min, int max) {
 		if (min >= max) {
 			throw new IllegalArgumentException("min must be less than max");
 		}
 		this.min = min;
 		this.max = max;
-		removed = new LinkedList<>();
 	}
 	private class RangeIterator implements Iterator<Integer> {
-		int current = min;
+		Integer current = getCurrent(min - 1);
+		Integer prev = null;
 		boolean flNext = false;
-		int prevElement = 0;
 		@Override
 		public boolean hasNext() {
-			while(removed.contains(current) & (current < max)) {
-				current++;
-			}
-			return current < max;
+			
+			return current != null;
 		}
 
 		@Override
 		public Integer next() {
-			if(!hasNext()) {
+			if(current == null) {
 				throw new NoSuchElementException();
 			}
+			int currentNum = current;
+			prev = current;
+			current = getCurrent(current);
 			flNext = true;
-			prevElement = current;
-			return current++;
+			return currentNum;
 		}
+		private Integer getCurrent(Integer current) {
+			Integer res = null;
+			current++;
+			while(current < max && res == null) {
+				if(!removedList.contains(current)) {
+					res = current;
+				}
+				current++;
+			}
+			return res;
+		}
+
 		@Override
 		public void remove() {
 			if(!flNext) {
 				throw new IllegalStateException();
 			}
-			removed.add(prevElement);
+			removedList.add(prev);
 			flNext = false;
+			
 		}
 		
 	}
@@ -53,9 +64,8 @@ public class Range implements Iterable<Integer> {
 		
 		return new RangeIterator();
 	}
-	
 	public Integer[] toArray() {
-		Integer [] array = new Integer[max - min - removed.size()];
+		Integer [] array = new Integer[getSize()];
 		int index = 0;
 		//First way
 //		for(Integer num: this) {
@@ -70,18 +80,19 @@ public class Range implements Iterable<Integer> {
 		return array;
 	}
 	public boolean removeIf(Predicate<Integer> predicate) {
-		int oldSize = removed.size();
+		int oldSize = getSize() ;
 		Iterator<Integer> it = iterator();
 		while(it.hasNext()) {
-			int obj = it.next();
-			if(predicate.test(obj)) {
+			int number = it.next();
+			if (predicate.test(number)) {
 				it.remove();
 			}
 		}
-		return oldSize < removed.size();
+		return oldSize > getSize();
 	}
-	
-	
+	private int getSize() {
+		return max - min - removedList.size();
+	}
 	
 
 }

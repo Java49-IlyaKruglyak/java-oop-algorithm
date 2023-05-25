@@ -58,16 +58,20 @@ boolean flNext = false;
 	}
 	@Override
 	public boolean removeIf(Predicate<T> predicate) {
-		int index = 0;
-		int newSize = size;
-		for(int i = 0; i < newSize; i++) {
-			if(!predicate.test(array[i])) {
-				array[index++] = array[i];
+		//TODO rewrite the removeIf method of ArrayList for optimization (O[N])
+		int oldSize = size;
+		int indexDest = 0;
+		for(int indexSrc = 0; indexSrc < oldSize; indexSrc++) {
+			if (predicate.test(array[indexSrc])) {
+				size--;
+			} else {
+				array[indexDest++] = array[indexSrc];
 			}
-			size = index;
 		}
-		array[size] = null;
-		return newSize != size;
+		for (int i = size; i < oldSize; i++) {
+			array[i] = null;
+		}
+		return oldSize > size;
 	}
 
 	private void reallocate() {

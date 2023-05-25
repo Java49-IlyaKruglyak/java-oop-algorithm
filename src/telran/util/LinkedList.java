@@ -64,6 +64,8 @@ boolean flNext = false;
 	}
 
 	
+
+	
 	@Override
 	public void add(int index, T obj) {
 		if (index < 0 || index > size) {
@@ -97,6 +99,11 @@ boolean flNext = false;
 
 	@Override
 	public void sort(Comparator<T> comp) {
+		//TODO
+		//1. call the method toArray
+		//2. By applying Arrays.sort you sort the array from #1
+		//3. Passing over all LinkedList nodes and setting references to objects (T)
+		// in the appropriate order from #2
 		T[] array = toArray();
 	    Arrays.sort(array, comp);
 	    Node<T>current = head;
