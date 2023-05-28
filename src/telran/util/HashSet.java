@@ -2,27 +2,74 @@ package telran.util;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class HashSet<T> implements Set<T> {
 	private static final int DEFAULT_HASH_TABLE_SIZE = 16;
 	private LinkedList<T>[] hashTable;
 	private int size;
 	private class HashSetIterator implements Iterator<T> {
-
+		Integer currentIteratorIndex;
+		Iterator<T> currentIterator;
+		Iterator<T> prevIterator;
+		boolean flNext = false;
+		HashSetIterator() {
+			initialState();
+		}
+		private void initialState() {
+			currentIteratorIndex = getCurrentIteratorIndex(-1);
+			if(currentIteratorIndex > -1) {
+				currentIterator = hashTable[currentIteratorIndex].iterator();
+				
+				
+			}
+			
+			
+		}
+		private int getCurrentIteratorIndex(int currentIndex) {
+			currentIndex++;
+			while(currentIndex < hashTable.length && 
+					(hashTable[currentIndex] == null || hashTable[currentIndex].size() == 0)) {
+				currentIndex++;
+			}
+			return currentIndex < hashTable.length ? currentIndex : -1;
+		}
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+			
+			return currentIteratorIndex >= 0;
 		}
 
 		@Override
 		public T next() {
-			// TODO Auto-generated method stub
-			return null;
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			T res = currentIterator.next();
+			prevIterator = currentIterator;
+			updateState();
+			flNext = true;
+			return res;
+		}
+		private void updateState() {
+			if(!currentIterator.hasNext()) {
+				currentIteratorIndex =
+						getCurrentIteratorIndex(currentIteratorIndex);
+				if(currentIteratorIndex >= 0) {
+					currentIterator = hashTable[currentIteratorIndex].iterator();
+				}
+			}
+			
+			
 		}
 		@Override
 		public void remove() {
-			//TODO
+			if(!flNext) {
+				throw new IllegalStateException();
+			}
+			prevIterator.remove();
+			size--;
+			flNext = false;
 		}
 		
 	}
@@ -98,29 +145,6 @@ public class HashSet<T> implements Set<T> {
 		int index = getHashTableIndex(pattern);
 		return hashTable[index] != null && hashTable[index].contains(pattern);
 	}
-	@Override
-	//FIXME method should be removed after writing iterator
-	public T[] toArray(T[] ar) {
-		int size = size();
-		if (ar.length < size) {
-			ar = Arrays.copyOf(ar, size);
-		}
-		int index = 0;
-
-		for(int i = 0; i < hashTable.length; i++) {
-			LinkedList<T> list = hashTable[i];
-			if(list != null) {
-				for(T obj: list) {
-					ar[index++] = obj;
-				}
-			}
-			
-		}
-		if (ar.length > size) {
-			ar[size] = null;
-		}
-
-		return ar;
-	}
+	
 
 }
