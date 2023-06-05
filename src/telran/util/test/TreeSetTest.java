@@ -6,17 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import telran.util.Set;
 
-public class TreeSetTest extends SetTest {
+public class TreeSetTest extends SortedSetTest {
 
 	@Override
 	protected <T> Set<T> getSet() {
 		
 		return new TreeSet<>();
 	}
-	@Override
-	@Test
-	void clearPerformance() {
-		
-	}
+//	@Override
+//	@Test
+//	void clearPerformance() {
+//		
+//	}
 
 }

@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class TreeSet<T> implements Set<T> {
+public class TreeSet<T> implements SortedSet<T> {
 	private static class Node<T> {
 		T obj;
 		Node<T> parent;
@@ -12,6 +12,12 @@ public class TreeSet<T> implements Set<T> {
 		Node<T> right;
 		Node(T obj) {
 			this.obj = obj;
+		}
+		void setNulls() {
+			parent = null;
+			left = null;
+			right = null;
+			obj = null;
 		}
 		
 	}
@@ -168,6 +174,7 @@ public class TreeSet<T> implements Set<T> {
 		return node;
 	}
 	private void removeNonJunction(Node<T> node) {
+		
 		Node<T> parent = node.parent;
 		Node<T> child = node.left == null ? node.right : node.left;
 		if (parent == null) {
@@ -178,10 +185,12 @@ public class TreeSet<T> implements Set<T> {
 			} else {
 				parent.right = child;
 			}
-			if (child != null) {
-				child.parent = parent;
-			}
+			
 		}
+		if (child != null) {
+			child.parent = parent;
+		}
+		node.setNulls();
 		
 	}
 	@Override
@@ -194,6 +203,26 @@ public class TreeSet<T> implements Set<T> {
 	public Iterator<T> iterator() {
 		
 		return new TreeSetIterator();
+	}
+	@Override
+	public T first() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public T last() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public T ceiling(T key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public T floor(T key) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
