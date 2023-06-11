@@ -50,5 +50,20 @@ class LineRecursionTest {
 		assertArrayEquals(expected, LineRecursion.reverse(array));
 		assertArrayEquals(expected1, LineRecursion.reverse(array1));
 	}
+	@Test
+	void squareTest() {
+		assertEquals(100, LineRecursion.square(10));
+		assertEquals(10000, LineRecursion.square(-100));
+	}
+	@Test
+	void isSubstringTest() {
+		String str = "blobloblobloblokbloblo.";
+		assertTrue(LineRecursion.isSubstring(str, "blok"));
+		assertTrue(LineRecursion.isSubstring(str, "kblob"));
+		assertTrue(LineRecursion.isSubstring(str, "oblo."));
+		assertFalse(LineRecursion.isSubstring(str, "blod"));
+		assertFalse(LineRecursion.isSubstring(str, "bok"));
+		assertFalse(LineRecursion.isSubstring(str, "loko"));
+	}
 
 }
