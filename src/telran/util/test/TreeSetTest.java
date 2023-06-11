@@ -6,11 +6,12 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import telran.util.ArrayList;
+import telran.util.List;
 import telran.util.Set;
 
 public class TreeSetTest extends SortedSetTest {
@@ -71,9 +72,25 @@ void setUp() {
 		assertEquals(nNumbers / 2, treeBalanced.width());
 		
 	}
+	
 	private void balanceOrder(int[] array) {
-		// TODO 
-		//reorder array such that adding to tree will get a balanced tree
+		List<Integer> list = new ArrayList<>();
+		balanceOrder(array, 0, array.length - 1, list);
+		int index = 0;
+		for(int num: list) {
+			array[index++] = num;
+		}
+		
+		
+	}
+	private void balanceOrder(int[] array, int left, int right,
+			List<Integer> list) {
+		if(left <= right) {
+			int middle = (left + right) / 2;
+			list.add(array[middle]);
+			balanceOrder(array, left, middle - 1, list);
+			balanceOrder(array, middle + 1, right, list);
+		}
 		
 	}
 	@Test

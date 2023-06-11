@@ -364,7 +364,19 @@ public class TreeSet<T> implements SortedSet<T> {
 	}
 
 	public void inversion() {
-		// TODO Auto-generated method stub
+		inversion(root);
+		comp = comp.reversed();
+		
+	}
+
+	private void inversion(Node<T> root) {
+		if(root != null) {
+			Node<T> tmp = root.left;
+			root.left = root.right;
+			root.right = tmp;
+			inversion(root.left);
+			inversion(root.right);
+		}
 		
 	}
 
