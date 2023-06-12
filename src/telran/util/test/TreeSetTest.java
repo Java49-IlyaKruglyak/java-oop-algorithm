@@ -57,8 +57,8 @@ void setUp() {
 	}
 	@Test
 	void balanceTestFromSorted() {
-		int height = 20;
-		int nNumbers =  (int) Math.pow(2, height);
+		int height = 23;
+		int nNumbers =  1 << height;
 		int [] array = new int[nNumbers - 1];
 		for(int i = 0; i < array.length; i++) {
 			array[i] = i;
