@@ -14,6 +14,7 @@ public class PrimitiveStreams {
 		return new Random().ints(minInclusive, maxExclusive)
 				.distinct().limit(nNumbers).toArray();
 	}
+	
 	static public int[] shuffle(int[] array) {
 		 
 		//returns new array with shuffled numbers
@@ -24,11 +25,12 @@ public class PrimitiveStreams {
 		// adding numbers to the ArrayList
 		// 
 		//second stream pipe creates array of int's from telran.util.ArrayList as we have done at class
-		List<Integer> list = new ArrayList<>();
+		int [] res = new int[array.length];
+	    int []index = {0};
 		new Random().ints(0, array.length).distinct().limit(array.length)
-		.forEach(i -> list.add(array[i]));
+		.forEach(i -> res[index[0]++] = array[i]);
 		
-		return list.stream().mapToInt(n -> n).toArray();
+		return res;
 	}
 
 }
