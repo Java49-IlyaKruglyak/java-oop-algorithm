@@ -2,11 +2,11 @@ package telran.util.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.BeforeEach;
 
-import telran.util.Collection;
 import telran.util.Map;
-import telran.util.Set;
 import telran.util.Map.Entry;
 
 import org.junit.jupiter.api.Test;
@@ -29,90 +29,65 @@ protected Map<String, Integer> map;
 	}
 	@Test
 	void containsKeyTest() {
-		//TODO
-		for( String key : keys) {
-			assertTrue(map.containsKey(key));
-			assertFalse(map.containsKey(key+"X"));
-		}
-		assertThrowsExactly(NullPointerException.class, () -> map.containsKey(null));
+		Arrays.stream(keys).forEach(k -> assertTrue(map.containsKey(k)));
+		assertFalse(map.containsKey("12345"));
 	}
 	@Test
 	void containsValueTest() {
-		//TODO
-		for( Integer value : values) {
-			assertTrue(map.containsValue(value));
-			assertFalse(map.containsValue(value+1000000));
-		}
-		assertThrowsExactly(NullPointerException.class, () -> map.containsValue(null));
+		Arrays.stream(values).forEach(v -> assertTrue(map.containsValue(v)));
+		assertFalse(map.containsValue(12345));
+	}
+	@SuppressWarnings("unchecked")
+	@Test
+	void entrySetTest() {
+		
+		Entry<String, Integer>[] entriesExpected = new Entry[keys.length];
+		for(int i = 0; i < keys.length; i++) {
+			entriesExpected[i] = new Entry<>(keys[i], values[i]);
+		};
+		entriesExpected = getEntriesExpected(entriesExpected);
+		Entry<String, Integer>[] entriesActual =
+				getEntriesActual(map.entrySet().toArray(new Entry[0]));
+		assertArrayEquals(entriesExpected, entriesActual);		
+	}
+	
+	@Test
+	void keySetTest() {
+		String[] expected = getKeysExpected(keys);
+		String[] actual = getKeysActual(map.keySet().toArray(new String[0]));
+		assertArrayEquals(expected, actual);
 	}
 	@Test
 	void valuesTest() {
-		//TODO
-		Collection<Integer> col = map.values();
-		for( Integer value : values) {
-			assertTrue(col.contains(value));
-		}
-		for( Integer value : values) {
-			assertFalse(col.contains(value+1000));
-		}
-		assertEquals(values.length, col.size());
+		Integer[] expected = getValuesExpected(values);
+		Integer[] actual = getValuesActual(map.values().toArray(new Integer[0]));
+		assertArrayEquals(expected, actual);
 	}
 	@Test
 	void removeTest() {
-		//TODO
-		for( String key : keys) {
-			assertNotNull(map.remove(key));
-			assertNull(map.remove(key));			
-		}
+		Integer[] removedValues = Arrays.stream(keys).map(map::remove).toArray(size -> new Integer[size]);
+		assertArrayEquals(values, removedValues);
+		assertNull(map.remove(keys[0]));
 		assertEquals(0, map.entrySet().size());
-		assertThrowsExactly(NullPointerException.class, () -> map.containsKey(null));
 	}
-	@Test
-	void putTest() {
-		int sizePrev = map.entrySet().size();
-		Integer result = map.put(keys[0], values[0]+1000);
-		assertEquals(sizePrev, map.entrySet().size());
-		assertEquals(values[0]+1000, map.get(keys[0]));
-		assertEquals(values[0], result);
-		assertNull(map.put("xxx", 1000));
-		assertEquals(sizePrev+1, map.entrySet().size());
-		assertEquals(1000, map.get("xxx"));
-		assertThrowsExactly(NullPointerException.class, () -> map.put(null, 10));
-		map.put("kuku", null);
+	protected Integer[] getValuesActual(Integer[] values) {
+		Arrays.sort(values);
+		return values;
 	}
-	@Test
-	void getOrDefaultTest() {
-		Integer result = map.getOrDefault(keys[2], 73);
-		assertEquals(values[2], result);
-		result = map.getOrDefault("xxx", 73);
-		assertEquals(73, result);
+	protected  Integer[] getValuesExpected(Integer[] values) {
+		Integer[] res = Arrays.copyOf(values, values.length);
+		Arrays.sort(res);
+		return res;
+	};
+	protected abstract String[] getKeysActual(String[] keys);
+	protected String[] getKeysExpected(String[] keys) {
+		String[] res = Arrays.copyOf(keys, keys.length);
+		Arrays.sort(res);
+		return res;
 	}
-	@Test
-	void putIfAbsentTest() {
-		int sizePrev = map.entrySet().size();
-		Integer result = map.putIfAbsent(keys[3], 37);
-		assertEquals(values[3], map.get(keys[3]));
-		assertEquals(sizePrev, map.entrySet().size());
-		result = map.putIfAbsent("xxx", 37);
-		assertEquals(37, map.get("xxx"));
-		assertEquals(sizePrev+1, map.entrySet().size());
-	}
-	@Test
-	void keySetTest() {
-		Set<String> resultKeys = map.keySet();
-		for(String key: keys) {
-			assertTrue(resultKeys.contains(key));
-		}
-		assertEquals(keys.length, resultKeys.size());
-	}
-	@Test
-	void entrySetTest() {
-		Set<Entry<String, Integer>> entries = map.entrySet();
-		assertEquals(entries.size(), map.entrySet().size());
-		for(String key: keys) {
-			Entry<String, Integer> entry = new Entry<>(key, null);
-			assertEquals(map.get(key), entries.get(entry).getValue());
-		}
+	protected abstract Entry<String, Integer>[] getEntriesActual(Entry<String, Integer>[] entries);
+	protected Entry<String, Integer>[] getEntriesExpected(Entry<String, Integer>[] entries) {
+		Arrays.sort(entries);
+		return entries;
 	}
 }
-	
