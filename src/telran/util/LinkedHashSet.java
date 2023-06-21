@@ -1,6 +1,9 @@
 package telran.util;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+
 
 public class LinkedHashSet<T> implements Set<T> {
     int size;
@@ -16,21 +19,32 @@ public class LinkedHashSet<T> implements Set<T> {
     Node<T> tail;
     HashMap<T, Node<T>> map = new HashMap<>();
     private class LinkedHashSetIterator implements Iterator<T> {
-
+    	Node<T> current = head;
+    	boolean flNext = false;
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+			
+			return current != null;
 		}
 
 		@Override
 		public T next() {
-			// TODO Auto-generated method stub
-			return null;
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			T res = current.obj;
+			current = current.next;
+			flNext = true;
+			return res;
 		}
 		@Override
 		public void remove() {
-			//TODO
+			if(!flNext) {
+				throw new IllegalStateException();
+			}
+			Node<T> nodeForRemove = current != null ? current.prev : tail;
+			LinkedHashSet.this.remove(nodeForRemove.obj);
+			flNext = false;
 		}
     	
     }
@@ -48,7 +62,13 @@ public class LinkedHashSet<T> implements Set<T> {
 	}
 
 	private void addNode(Node<T> node) {
-		// TODO Auto-generated method stub
+		if(head == null) {
+			head = tail = node;
+		} else {
+			tail.next = node;
+			node.prev = tail;
+			tail = node;
+		}
 		
 	}
 
@@ -72,8 +92,39 @@ public class LinkedHashSet<T> implements Set<T> {
 	}
 
 	private void removeNode(Node<T> node) {
-		// TODO Auto-generated method stub
+		if (node == head) {
+			removeHead();
+		} else if (node == tail) {
+			removeTail();
+		} else {
+			removeMiddle(node);
+		}
 		
+		
+	}
+	private void removeHead() {
+		Node<T> newHead = head.next;
+		if (newHead != null) {
+			newHead.prev = null;
+		}
+		head.next = null;
+		head = newHead;
+
+	}
+	private void removeMiddle(Node<T> node) {
+		Node<T> nodeBefore = node.prev;
+		Node<T> nodeAfter = node.next;
+		nodeBefore.next = nodeAfter;
+		nodeAfter.prev = nodeBefore;
+		node.next = node.prev = null;
+	}
+	private void removeTail() {
+		Node<T> newTail = tail.prev;
+		if (newTail != null) {
+			newTail.next = null;
+		}
+		tail.prev = null;
+		tail = newTail;
 	}
 
 	@Override
